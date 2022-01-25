@@ -8,8 +8,8 @@
 !Makefile
 !README.md
 !**/
-!*.c
-!*.h
+!*.cpp
+!*.hpp
 
 
 # tests

@@ -8,24 +8,17 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 # Variables #
 #############
 
-NAME	:= program_name
-B_NAME	:= program_name_b
-CC		:= gcc
+NAME	:= megaphone
+CXX		:= g++
 INCLUDE	:= -I./includes
-CFLAGS	:= -g -Wall -Werror -Wextra $(INCLUDE)
-LIBS	:=
-VPATH	:= srcs/
+CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 $(INCLUDE)
 
-SRCS	:= main.c
+SRCS	:= megaphone.c
 SRCDIRS	:= $(call uniq, $(dir $(SRCS)))
 
 OBJDIR	:= objs/
 OBJDIRS	:= $(addprefix $(OBJDIR), $(SRCDIRS))
 OBJS	:= $(addprefix $(OBJDIR), $(SRCS:%.c=%.o))
-
-B_SRCS	:= main_bonus.c
-B_OBJS	:= $(B_SRCS:%.c=$(SRCDIR)%.o)
-B_FLG	:= .bonus_flg
 
 DSTRCTR	:= ./tests/destructor.c
 
@@ -36,22 +29,19 @@ DSTRCTR	:= ./tests/destructor.c
 all: $(NAME)
 
 $(NAME): $(OBJDIRS) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS)
-
-bonus: $(B_FLG)
-
-$(B_FLG): $(OBJDIRS) $(B_OBJS)
-	$(CC) $(CFLAGS) $(B_OBJS) -o $(NAME) $(LIBS)
-	touch $(B_FLG)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME) $(LIBS)
 
 clean: FORCE
-	$(RM) $(OBJS) $(B_OBJS)
+	$(RM) $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME) $(B_NAME)
-	$(RM) -r $(NAME).dSYM $(B_NAME).dSYM
+	$(RM) $(NAME)
+	$(RM) -r $(NAME).dSYM
 
 re: fclean all
+
+run: $(NAME)
+	./$(NAME)
 
 norm: FORCE
 	@printf "$(RED)"; norminette | grep -v ": OK!" \
@@ -61,9 +51,9 @@ norm: FORCE
 $(OBJDIRS):
 	mkdir -p $@
 
-$(OBJDIR)%.o: %.c
+$(OBJDIR)%.o: %.cpp
 	@printf "$(THIN)$(ITALIC)"
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 	@printf "$(END)"
 
 FORCE:
@@ -84,16 +74,6 @@ Darwin_leak: $(DSTRCTR) $(OBJDIRS) $(OBJS)
 Linux_leak: sani
 
 leak: $(shell uname)_leak
-
-bonus_sani: $(OBJDIRS) $(B_OBJS)
-	$(CC) $(CFLAGS) -fsanitize=address $(B_OBJS) -o $(B_NAME) $(LIBS)
-
-bonus_Darwin_leak: $(DSTRCTR) $(OBJDIRS) $(B_OBJS)
-	$(CC) $(CFLAGS) $(B_OBJS) $(DSTRCTR) -o $(B_NAME) $(LIBS)
-
-bonus_Linux_leak: bonus_sani
-
-bonus_leak: bonus_$(shell uname)_leak
 
 ##############
 # Test rules #
