@@ -10,8 +10,7 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 
 NAME	:= megaphone
 CXX		:= c++
-INCLUDE	:= -I./includes
-CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 $(INCLUDE)
+CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98
 
 SRCS	:= megaphone.c
 SRCDIRS	:= $(call uniq, $(dir $(SRCS)))
@@ -79,10 +78,29 @@ leak: $(shell uname)_leak
 # Test rules #
 ##############
 
-test: all
+test1: FORCE
 	./$(NAME) "shhhhh... I think the students are asleep..."
+	@[ "`./$(NAME) "shhhhh... I think the students are asleep..."`" \
+			= "SHHHHH... I THINK THE STUDENTS ARE ASLEEP..." ] \
+	|| exit 1 \
+	&& printf "$(GREEN)OK\n$(END)";
+
+
+test2: FORCE
 	./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
+	@[ "`./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."`" \
+			= "DAMNIT ! SORRY STUDENTS, I THOUGHT THIS THING WAS OFF." ] \
+	|| exit 1 \
+	&& printf "$(GREEN)OK\n$(END)";
+
+test3: FORCE
 	./$(NAME)
+	@[ "`./$(NAME)`" \
+			= "* LOUD AND UNBEARABLE FEEDBACK NOISE *" ] \
+	|| exit 1 \
+	&& printf "$(GREEN)OK\n$(END)";
+
+test: all test1 test2 test3
 
 ##########
 # Colors #
