@@ -9,7 +9,7 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 #############
 
 NAME	:= megaphone
-CXX		:= g++
+CXX		:= c++
 INCLUDE	:= -I./includes
 CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 $(INCLUDE)
 
@@ -79,44 +79,10 @@ leak: $(shell uname)_leak
 # Test rules #
 ##############
 
-CXX			:= clang++
-CXXFLAG		:= -std=c++11 -DDEBUG -g -fsanitize=integer -fsanitize=address -Wno-writable-strings
-gTestDir	:= ./.google_test
-gVersion	:= release-1.11.0
-gTestVer	:= googletest-$(gVersion)
-gTest		:= $(gTestDir)/gtest $(gTestDir)/$(gTestVer)
-
-TESTDIR		:= ./tests/
-TESTSRCS_C	:= $(filter-out main.c,$(SRCS))
-TESTSRCS_CPP:= $(wildcard $(TESTDIR)*.cpp)
-TESTOBJS	:= $(addprefix $(SRCDIR), $(TESTSRCS_C:%.c=%.o)) \
-				$(TESTSRCS_CPP:%.cpp=%.o)
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAG) -I$(gTestDir) $(INCLUDE) -c $< -o $@
-
-$(gTest):
-	mkdir -p $(gTestDir)
-	curl -OL https://github.com/google/googletest/archive/refs/tags/$(gVersion).tar.gz
-	tar -xvzf $(gVersion).tar.gz $(gTestVer)
-	$(RM) $(gVersion).tar.gz
-	python $(gTestVer)/googletest/scripts/fuse_gtest_files.py $(gTestDir)
-	mv $(gTestVer) $(gTestDir)
-
-test: $(gTest) $(TESTOBJS)
-	@$(CXX) $(CXXFLAG) \
-		$(TESTOBJS) \
-		$(gTestDir)/$(gTestVer)/googletest/src/gtest_main.cc \
-		$(gTestDir)/gtest/gtest-all.cc \
-		-I$(gTestDir) $(INCLUDE) $(LIBS) -lpthread -o test && ./test
-
-test_clean: FORCE
-	$(RM) $(TESTOBJS)
-
-test_fclean: test_clean
-	$(RM) -r tester tester.dSYM
-
-test_re: test_fclean test
+test: all
+	./$(NAME) "shhhhh... I think the students are asleep..."
+	./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
+	./$(NAME)
 
 ##########
 # Colors #
