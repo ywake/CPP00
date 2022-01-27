@@ -12,12 +12,12 @@ NAME	:= megaphone
 CXX		:= c++
 CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98
 
-SRCS	:= megaphone.c
+SRCS	:= megaphone.cpp
 SRCDIRS	:= $(call uniq, $(dir $(SRCS)))
 
 OBJDIR	:= objs/
 OBJDIRS	:= $(addprefix $(OBJDIR), $(SRCDIRS))
-OBJS	:= $(addprefix $(OBJDIR), $(SRCS:%.c=%.o))
+OBJS	:= $(addprefix $(OBJDIR), $(SRCS:%.cpp=%.o))
 
 DSTRCTR	:= ./tests/destructor.c
 
