@@ -15,4 +15,4 @@
 # tests
 destructor.c
 !auto_test.sh
-gtest
+.google_test
