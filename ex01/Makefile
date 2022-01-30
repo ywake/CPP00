@@ -10,14 +10,16 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 
 NAME	:= PhoneBook
 CXX		:= c++
-CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98
+CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 -pedantic
 
 SRCS	:= main.cpp PhoneBook.cpp Contact.cpp
 SRCDIRS	:= $(call uniq, $(dir $(SRCS)))
 
-OBJDIR	:= objs/
+OBJDIR	:= build/
 OBJDIRS	:= $(addprefix $(OBJDIR), $(SRCDIRS))
 OBJS	:= $(addprefix $(OBJDIR), $(SRCS:%.cpp=%.o))
+
+DEPS	:= $(addprefix $(OBJDIR), $(SRCS:%.cpp=%.d))
 
 DSTRCTR	:= ./tests/destructor.c
 
@@ -31,7 +33,7 @@ $(NAME): $(OBJDIRS) $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME) $(LIBS)
 
 clean: FORCE
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(DEPS)
 
 fclean: clean
 	$(RM) $(NAME)
@@ -52,8 +54,10 @@ $(OBJDIRS):
 
 $(OBJDIR)%.o: %.cpp
 	@printf "$(THIN)$(ITALIC)"
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 	@printf "$(END)"
+
+-include $(DEPS)
 
 FORCE:
 
