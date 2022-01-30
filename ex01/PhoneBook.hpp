@@ -6,7 +6,7 @@
 /*   By: ywake <ywake@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:36:52 by ywake             #+#    #+#             */
-/*   Updated: 2022/01/29 19:15:47 by ywake            ###   ########.fr       */
+/*   Updated: 2022/01/30 14:39:39 by ywake            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ class PhoneBook
 {
 private:
   int _index;
+  size_t _contacts_num;
   Contact _contacts[8];
   void _exit(void);
   void _add(void);

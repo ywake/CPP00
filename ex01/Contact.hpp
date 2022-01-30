@@ -6,7 +6,7 @@
 /*   By: ywake <ywake@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:19:59 by ywake             #+#    #+#             */
-/*   Updated: 2022/01/29 19:17:13 by ywake            ###   ########.fr       */
+/*   Updated: 2022/01/30 17:09:55 by ywake            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ public:
     _phoneNumber(strs[3]),
     _darkestSecret(strs[4]) {};
   ~Contact() {};
-  void showRow(void);
+  void showRow(size_t index);
+  void showInfo(void);
 };
 
 #endif

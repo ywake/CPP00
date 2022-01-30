@@ -6,16 +6,19 @@
 /*   By: ywake <ywake@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:37:20 by ywake             #+#    #+#             */
-/*   Updated: 2022/01/29 19:23:35 by ywake            ###   ########.fr       */
+/*   Updated: 2022/01/30 17:10:21 by ywake            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <iomanip>
+#include <limits>
+#include <sstream>
 
 #include "PhoneBook.hpp"
+#include "showTable.hpp"
 
-PhoneBook::PhoneBook() : _index(0), _contacts()
+PhoneBook::PhoneBook() : _index(0), _contacts_num(0)
 {
 }
 
@@ -34,8 +37,7 @@ void PhoneBook::run()
     std::string input;
 
     std::cout << "> ";
-    std::getline(std::cin, input);
-    if (std::cin.fail()) {
+    if (!std::getline(std::cin, input)) {
       std::cout << std::endl;
       break;
     }
@@ -72,38 +74,39 @@ void PhoneBook::_addContact(Contact contact)
 {
   _contacts[_index] = contact;
   _index = (_index + 1) % 8;
-}
-
-void showHorizonLine()
-{
-  for (size_t i = 0; i < 4; i++)
-    std::cout << "+----------";
-  std::cout << "+" << std::endl;
-}
-
-void showHeader()
-{
-  showHorizonLine();
-  const std::string headers[] = {
-    "index", "first name", "last name", "nickname"};
-  for (size_t i = 0; i < 4; i++)
-    std::cout << "|" << std::setw(10) << headers[i];
-  std::cout << "|" << std::endl;
-  showHorizonLine();
-}
-
-void PhoneBook::_showTable(void)
-{
-  showHeader();
-  for (size_t i = 0; i < 8; i++)
-  {
-    std::cout << "|" << std::setw(10) << i;
-    _contacts[i].showRow();
-  }
-  showHorizonLine();
+  _contacts_num++;
 }
 
 void PhoneBook::_search(void)
 {
   _showTable();
+
+  int index = -1;
+  while (true)
+  {
+    std::cout << "index> ";
+    std::string buf;
+    if (!std::getline(std::cin, buf))
+    {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+      std::cout << std::endl;
+      exit(1);
+    } else {
+      if (buf.length() == 1 && std::isdigit(buf[0])) {
+        std::istringstream(buf) >> index;
+        if (0 <= index && index < 8)
+          break;
+      }
+    }
+  }
+  _contacts[index].showInfo();
+}
+
+void PhoneBook::_showTable(void)
+{
+  showHeader();
+  for (size_t i = 0; i < 8 && i < _contacts_num; i++)
+    _contacts[i].showRow(i);
+  showHorizonLine();
 }

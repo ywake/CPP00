@@ -12,7 +12,7 @@ NAME	:= PhoneBook
 CXX		:= c++
 CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 -pedantic
 
-SRCS	:= main.cpp PhoneBook.cpp Contact.cpp
+SRCS	:= main.cpp PhoneBook.cpp Contact.cpp showTable.cpp
 SRCDIRS	:= $(call uniq, $(dir $(SRCS)))
 
 OBJDIR	:= build/
