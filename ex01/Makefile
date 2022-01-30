@@ -21,7 +21,7 @@ OBJS	:= $(addprefix $(OBJDIR), $(SRCS:%.cpp=%.o))
 
 DEPS	:= $(addprefix $(OBJDIR), $(SRCS:%.cpp=%.d))
 
-DSTRCTR	:= ./tests/destructor.c
+DSTRCTR	:= ./destructor.c
 
 #################
 # General rules #
@@ -82,39 +82,39 @@ leak: $(shell uname)_leak
 # Test rules #
 ##############
 
-gTestFlag	:= -std=c++11 -DDEBUG -g -fsanitize=integer -fsanitize=address -Wno-writable-strings
-gTestDir	:= ../.google_test
-gVersion	:= release-1.11.0
-gTestVer	:= googletest-$(gVersion)
-gTest		:= $(gTestDir)/gtest $(gTestDir)/$(gTestVer)
+# gTestFlag	:= -std=c++11 -DDEBUG -g -fsanitize=integer -fsanitize=address -Wno-writable-strings
+# gTestDir	:= ../.google_test
+# gVersion	:= release-1.11.0
+# gTestVer	:= googletest-$(gVersion)
+# gTest		:= $(gTestDir)/gtest $(gTestDir)/$(gTestVer)
 
-TEST_SRCS	:= $(filter-out main.cpp, $(SRCS))
-TEST_OBJS	:= $(addprefix $(OBJDIR), $(TEST_SRCS:%.cpp=%.o))
-TEST_CPP	:= $(shell find . -type f -name test_*.cpp)
+# TEST_SRCS	:= $(filter-out main.cpp, $(SRCS))
+# TEST_OBJS	:= $(addprefix $(OBJDIR), $(TEST_SRCS:%.cpp=%.o))
+# TEST_CPP	:= $(shell find . -type f -name test_*.cpp)
 
-$(gTest):
-	mkdir -p $(gTestDir)
-	curl -OL https://github.com/google/googletest/archive/refs/tags/$(gVersion).tar.gz
-	tar -xvzf $(gVersion).tar.gz $(gTestVer)
-	$(RM) $(gVersion).tar.gz
-	python $(gTestVer)/googletest/scripts/fuse_gtest_files.py $(gTestDir)
-	mv $(gTestVer) $(gTestDir)
+# $(gTest):
+# 	mkdir -p $(gTestDir)
+# 	curl -OL https://github.com/google/googletest/archive/refs/tags/$(gVersion).tar.gz
+# 	tar -xvzf $(gVersion).tar.gz $(gTestVer)
+# 	$(RM) $(gVersion).tar.gz
+# 	python $(gTestVer)/googletest/scripts/fuse_gtest_files.py $(gTestDir)
+# 	mv $(gTestVer) $(gTestDir)
 
-tester: $(gTest) $(OBJDIRS) $(TEST_OBJS)
-	$(CXX) $(gTestFlag) \
-		$(TEST_OBJS) $(TEST_CPP) \
-		$(gTestDir)/$(gTestVer)/googletest/src/gtest_main.cc \
-		$(gTestDir)/gtest/gtest-all.cc \
-		-I$(gTestDir) $(INCLUDE) $(LIBS) -lpthread -o tester
+# tester: $(gTest) $(OBJDIRS) $(TEST_OBJS)
+# 	$(CXX) $(gTestFlag) \
+# 		$(TEST_OBJS) $(TEST_CPP) \
+# 		$(gTestDir)/$(gTestVer)/googletest/src/gtest_main.cc \
+# 		$(gTestDir)/gtest/gtest-all.cc \
+# 		-I$(gTestDir) $(INCLUDE) $(LIBS) -lpthread -o tester
 
-test: tester
-	./tester
+# test: tester
+# 	./tester
 
 
-test_fclean:
-	$(RM) -r tester tester.dSYM
+# test_fclean:
+# 	$(RM) -r tester tester.dSYM
 
-test_re: test_fclean test
+# test_re: test_fclean test
 
 ##########
 # Colors #
