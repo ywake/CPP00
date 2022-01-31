@@ -8,7 +8,7 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 # Variables #
 #############
 
-NAME	:= PhoneBook
+NAME	:= a.out
 CXX		:= c++
 CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 -pedantic
 
@@ -82,6 +82,16 @@ leak: $(shell uname)_leak
 # Test rules #
 ##############
 
+FILE	:= 19920104_091532.log
+
+$(FILE):
+	curl -O https://projects.intra.42.fr/uploads/document/document/6787/19920104_091532.log
+
+test: $(FILE) $(NAME)
+	@cat $(FILE) | awk '{print $$2}' > expect
+	@./$(NAME) | awk '{print $$2}' > out
+	diff -y expect out
+
 # gTestFlag	:= -std=c++11 -DDEBUG -g -fsanitize=integer -fsanitize=address -Wno-writable-strings
 # gTestDir	:= ../.google_test
 # gVersion	:= release-1.11.0
@@ -109,7 +119,6 @@ leak: $(shell uname)_leak
 
 # test: tester
 # 	./tester
-
 
 # test_fclean:
 # 	$(RM) -r tester tester.dSYM
