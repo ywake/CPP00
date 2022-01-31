@@ -10,7 +10,7 @@ uniq = $(if $1,$(firstword $1) $(call uniq,$(filter-out $(firstword $1),$1)))
 
 NAME	:= a.out
 CXX		:= c++
-CXXFLAGS:= -g -Wall -Werror -Wextra -std=c++98 -pedantic
+CXXFLAGS:= -g -std=c++98 -pedantic -Wall -Werror -Wextra
 
 SRCS	:= Account.cpp tests.cpp
 SRCDIRS	:= $(call uniq, $(dir $(SRCS)))
@@ -88,9 +88,10 @@ $(FILE):
 	curl -O https://projects.intra.42.fr/uploads/document/document/6787/19920104_091532.log
 
 test: $(FILE) $(NAME)
-	@cat $(FILE) | awk '{print $$2}' > expect
-	@./$(NAME) | awk '{print $$2}' > out
+	@cat $(FILE) | awk '{if (NR<52) print $$2}' > expect
+	@./$(NAME) | awk '{if (NR<52) print $$2}' > out
 	diff -y expect out
+	@$(RM) expect out
 
 # gTestFlag	:= -std=c++11 -DDEBUG -g -fsanitize=integer -fsanitize=address -Wno-writable-strings
 # gTestDir	:= ../.google_test
