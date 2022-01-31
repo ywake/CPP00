@@ -59,6 +59,7 @@ $(OBJDIR)%.o: %.cpp
 
 -include $(DEPS)
 
+.PHONY: FORCE
 FORCE:
 
 ###############

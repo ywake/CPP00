@@ -55,6 +55,7 @@ $(OBJDIR)%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	@printf "$(END)"
 
+.PHONY: FORCE
 FORCE:
 
 ###############
