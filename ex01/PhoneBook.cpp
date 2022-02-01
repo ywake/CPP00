@@ -6,7 +6,7 @@
 /*   By: ywake <ywake@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:37:20 by ywake             #+#    #+#             */
-/*   Updated: 2022/01/30 17:10:21 by ywake            ###   ########.fr       */
+/*   Updated: 2022/02/01 17:53:19 by ywake            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,13 @@ void PhoneBook::_add(void)
   {
     std::cout << pronpts[i];
     std::cout << "> ";
-    getline(std::cin, inputs[i]);
-    i++;
+    if (!std::getline(std::cin, inputs[i]))
+    {
+      std::cout << std::endl;
+      exit(1);
+    } else {
+      i++;
+    }
   }
   _addContact(Contact(inputs));
 }
@@ -88,8 +93,6 @@ void PhoneBook::_search(void)
     std::string buf;
     if (!std::getline(std::cin, buf))
     {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::cout << std::endl;
       exit(1);
     } else {
