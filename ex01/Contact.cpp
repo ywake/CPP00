@@ -6,7 +6,7 @@
 /*   By: ywake <ywake@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 13:20:03 by ywake             #+#    #+#             */
-/*   Updated: 2022/02/01 17:55:30 by ywake            ###   ########.fr       */
+/*   Updated: 2022/02/03 15:26:15 by ywake            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@ Contact::Contact() :
   _lastName(),
   _nickname(),
   _phoneNumber(),
-  _darkestSecret() { };
+  _darkestSecret() { }
 
 Contact::Contact(std::string strs[5]) :
   _firstName(strs[0]),
   _lastName(strs[1]),
   _nickname(strs[2]),
   _phoneNumber(strs[3]),
-  _darkestSecret(strs[4]) { };
+  _darkestSecret(strs[4]) { }
 
-Contact::~Contact() { };
+Contact::~Contact() { }
 
 void Contact::showRow(size_t index)
 {
